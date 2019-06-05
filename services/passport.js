@@ -20,8 +20,11 @@ passport.use(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
+      // callBackURL is where user is redirected when auth is complete
       callbackURL: "/auth/google/callback"
     },
+    // Function triggered after user is redirected from authRoutes after
+    // google send back to callbackURL with token
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleID: profile.id }).then(existingUser => {
         if (existingUser) {
