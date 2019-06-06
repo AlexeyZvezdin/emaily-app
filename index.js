@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cookieSession = require("cookie-session");
+const passport = require("passport");
 const keys = require("./config/keys");
 require("./models/User"); // СНачала модель подключается
 require("./services/passport");
@@ -11,6 +13,17 @@ mongoose
   .catch(err => console.log(err));
 
 const app = express();
+
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+
+// Tell passport that it need make use of cookies to handle auth
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Where auth begins
 require("./routes/authRoutes")(app);
