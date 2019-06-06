@@ -1,6 +1,7 @@
 const passport = require("passport");
 
 module.exports = app => {
+  // Google Auth
   app.get(
     "/auth/google",
     passport.authenticate("google", {
@@ -16,4 +17,28 @@ module.exports = app => {
   app.get("/api/current_user", (req, res) => {
     res.send(req.user);
   });
+
+  // VK Auth
+  app.get(
+    "/auth/vkontakte",
+    passport.authenticate("vkontakte", {
+      scope: ["status", "email", "friends"]
+    }),
+    function(req, res) {
+      console.log(res, req);
+      // The request will be redirected to vk.com for authentication, so
+      // this function will not be called.
+    }
+  );
+
+  app.get(
+    "/auth/vkontakte/callback",
+    passport.authenticate("vkontakte", { failureRedirect: "/lox" }),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      // res.redirect("/");
+      // need to check this ->
+      res.send(req.user);
+    }
+  );
 };

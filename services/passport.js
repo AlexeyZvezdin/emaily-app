@@ -1,5 +1,8 @@
 const passport = require("passport");
+// strategies
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const VKontakteStrategy = require("passport-vkontakte").Strategy;
+
 const mongoose = require("mongoose");
 const keys = require("../config/keys");
 
@@ -15,6 +18,7 @@ passport.deserializeUser((id, done) => {
   });
 });
 
+// Google strategy realization
 passport.use(
   new GoogleStrategy(
     {
@@ -37,6 +41,31 @@ passport.use(
         }
       });
       console.log(profile.id);
+    }
+  )
+);
+
+// Vk strategy realization
+
+passport.use(
+  new VKontakteStrategy(
+    {
+      // main option and how it looks like after transformation by OAuth2Strategy func
+      // authorizationURL: `https://oauth.vk.com/authorize?client_id=${
+      //   keys.vkAppID
+      // }&redirect_uri=http://localhost:5000/auth/vkontakte/callback&v=5.95`,
+      clientID: keys.vkAppID, // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
+      clientSecret: keys.vkAppSecret,
+      callbackURL: "http://localhost:5000/auth/vkontakte/callback",
+      // profileFields: ["city", "bdate"],
+      apiVersion: "5.95"
+    },
+    function(accessToken, refreshToken, params, profile, done) {
+      console.log(params.email); // getting the email
+      console.log(profile);
+      User.findOne({ vkontakteId: profile.id }, function(err, user) {
+        return done(err, user);
+      });
     }
   )
 );
