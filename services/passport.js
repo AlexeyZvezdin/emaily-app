@@ -63,9 +63,14 @@ passport.use(
     },
     function(accessToken, refreshToken, params, profile, done) {
       // console.log(params.email); // getting the email and it is may be undefined
-      // console.log(profile);
-      User.findOne({ vkontakteId: profile.id }, function(err, user) {
-        return done(err, user);
+      console.log(profile.id);
+      User.findOne({ vkID: profile.id }).then(existingUser => {
+        if (existingUser) {
+          // already have user
+          done(null, existingUser);
+        } else {
+          new User({ vkID: profile.id }).save().then(user => done(null, user));
+        }
       });
     }
   )
@@ -79,11 +84,18 @@ passport.use(
       clientSecret: keys.githubSecretKey,
       callbackURL: "http://localhost:5000/auth/github/callback"
     },
-    function(accessToken, refreshToken, profile, cb) {
-      console.log(profile);
-      // User.findOne({ githubId: profile.id }, function(err, user) {
-      //   return cb(err, user);
-      // });
+    function(accessToken, refreshToken, profile, done) {
+      console.log(profile.name);
+      User.findOne({ githubID: profile.id }).then(existingUser => {
+        if (existingUser) {
+          // already have user
+          done(null, existingUser);
+        } else {
+          new User({ githubID: profile.id })
+            .save()
+            .then(user => done(null, user));
+        }
+      });
     }
   )
 );

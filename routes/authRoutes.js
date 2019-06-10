@@ -27,16 +27,7 @@ module.exports = app => {
     }
   );
 
-  app.get(
-    "/auth/vkontakte/callback",
-    passport.authenticate("vkontakte", { failureRedirect: "/lox" }),
-    function(req, res) {
-      // Successful authentication, redirect home.
-      // need to check this ->
-      res.send(req.user);
-      res.redirect("/");
-    }
-  );
+  app.get("/auth/vkontakte/callback", passport.authenticate("vkontakte"));
 
   // Github auth
 
@@ -47,11 +38,12 @@ module.exports = app => {
     res
   ) {
     // Successful authentication, redirect home.
-    console.log(res, "ale");
+    // res.send(req.session); // — Переправляет на json req.session object
     res.redirect("/");
   });
 
   app.get("/api/current_user", (req, res) => {
+    // res.send(req.session);
     res.send(req.user);
   });
 
