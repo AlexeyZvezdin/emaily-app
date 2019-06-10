@@ -2,6 +2,7 @@ const passport = require("passport");
 // strategies
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const VKontakteStrategy = require("passport-vkontakte").Strategy;
+const GitHubStrategy = require("passport-github").Strategy;
 
 const mongoose = require("mongoose");
 const keys = require("../config/keys");
@@ -61,11 +62,28 @@ passport.use(
       apiVersion: "5.95"
     },
     function(accessToken, refreshToken, params, profile, done) {
-      console.log(params.email); // getting the email
-      console.log(profile);
+      // console.log(params.email); // getting the email and it is may be undefined
+      // console.log(profile);
       User.findOne({ vkontakteId: profile.id }, function(err, user) {
         return done(err, user);
       });
+    }
+  )
+);
+
+// Github strategy realization
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: keys.githubID,
+      clientSecret: keys.githubSecretKey,
+      callbackURL: "http://localhost:5000/auth/github/callback"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      console.log(profile);
+      // User.findOne({ githubId: profile.id }, function(err, user) {
+      //   return cb(err, user);
+      // });
     }
   )
 );

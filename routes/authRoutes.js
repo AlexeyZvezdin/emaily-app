@@ -14,10 +14,6 @@ module.exports = app => {
   // code for access. Made for security purpose to not allow change uri callback adress
   app.get("/auth/google/callback", passport.authenticate("google"));
 
-  app.get("/api/current_user", (req, res) => {
-    res.send(req.user);
-  });
-
   // VK Auth
   app.get(
     "/auth/vkontakte",
@@ -36,9 +32,33 @@ module.exports = app => {
     passport.authenticate("vkontakte", { failureRedirect: "/lox" }),
     function(req, res) {
       // Successful authentication, redirect home.
-      // res.redirect("/");
       // need to check this ->
       res.send(req.user);
+      res.redirect("/");
     }
   );
+
+  // Github auth
+
+  app.get("/auth/github", passport.authenticate("github"));
+
+  app.get("/auth/github/callback", passport.authenticate("github"), function(
+    req,
+    res
+  ) {
+    // Successful authentication, redirect home.
+    console.log(res, "ale");
+    res.redirect("/");
+  });
+
+  app.get("/api/current_user", (req, res) => {
+    res.send(req.user);
+  });
+
+  app.get("/api/logout", (req, res) => {
+    // Logout is a function inside passport
+    req.logout();
+    res.send(req.user);
+    res.redirect("/");
+  });
 };
