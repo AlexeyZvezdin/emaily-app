@@ -26,7 +26,8 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       // callBackURL is where user is redirected when auth is complete
-      callbackURL: "/auth/google/callback"
+      callbackURL: "/auth/google/callback",
+      proxy: true
     },
     // Function triggered after user is redirected from authRoutes after
     // google send back to callbackURL with token
@@ -57,9 +58,10 @@ passport.use(
       // }&redirect_uri=http://localhost:5000/auth/vkontakte/callback&v=5.95`,
       clientID: `${keys.vkAppID}`, // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
       clientSecret: `${keys.vkAppSecret}`,
-      callbackURL: "http://localhost:5000/auth/vkontakte/callback",
+      callbackURL: "/auth/vkontakte/callback",
       // profileFields: ["city", "bdate"],
-      apiVersion: "5.95"
+      apiVersion: "5.95",
+      proxy: true
     },
     function(accessToken, refreshToken, params, profile, done) {
       // console.log(params.email); // getting the email and it is may be undefined
@@ -82,7 +84,8 @@ passport.use(
     {
       clientID: keys.githubID,
       clientSecret: keys.githubSecretKey,
-      callbackURL: "http://localhost:5000/auth/github/callback"
+      callbackURL: "/auth/github/callback",
+      proxy: true
     },
     function(accessToken, refreshToken, profile, done) {
       console.log(profile.name);
