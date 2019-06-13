@@ -55,8 +55,8 @@ passport.use(
       // authorizationURL: `https://oauth.vk.com/authorize?client_id=${
       //   keys.vkAppID
       // }&redirect_uri=http://localhost:5000/auth/vkontakte/callback&v=5.95`,
-      clientID: keys.vkAppID, // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
-      clientSecret: keys.vkAppSecret,
+      clientID: `${keys.vkAppID}`, // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
+      clientSecret: `${keys.vkAppSecret}`,
       callbackURL: "http://localhost:5000/auth/vkontakte/callback",
       // profileFields: ["city", "bdate"],
       apiVersion: "5.95"
