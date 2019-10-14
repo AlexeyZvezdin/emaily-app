@@ -13,6 +13,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+// when cookies come from browser this is fired up
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
     done(null, user);
@@ -31,24 +32,22 @@ passport.use(
     },
     // Function triggered after user is redirected from authRoutes after
     // google send back to callbackURL with token
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleID: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // already have user
-          done(null, existingUser);
-        } else {
-          new User({ googleID: profile.id })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
-      console.log(profile.id);
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleID: profile.id });
+      if (existingUser) {
+        // already have user
+        done(null, existingUser);
+      } else {
+        const user = await new User({ googleID: profile.id }).save();
+        console.log(profile.id);
+        done(null, user);
+      }
     }
   )
 );
 
 // Vk strategy realization
-
+//  IMPORTANT! TO MAKE USE OF BELOW AUTH I NEED TO CHANGE REDIRECTIONS ON THEIRS API
 passport.use(
   new VKontakteStrategy(
     {
