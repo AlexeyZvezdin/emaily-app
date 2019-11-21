@@ -21,12 +21,15 @@ app.use(
   })
 );
 
+app.use(express.json());
+
 // Tell passport that it need make use of cookies to handle auth
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Where auth begins
 require("./routes/authRoutes")(app);
+require("./routes/billingRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
