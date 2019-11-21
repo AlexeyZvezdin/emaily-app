@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
 }
@@ -17,6 +13,8 @@
   color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.payment-cell {
+  padding: 25px;
+  margin: 0 auto;
+  max-width: 450px;
 }

@@ -12,7 +12,14 @@ class Header extends React.Component {
         return <a href="/auth/google">Log In with Google</a>;
       }
       default: {
-        return <a href="/api/logout">Logout</a>;
+        return [
+          <li key="1" style={{ margin: "0 5px" }}>
+            <span>Credits: {this.props.auth.credits}</span>
+          </li>,
+          <li key="2">
+            <a href="/api/logout">Logout</a>
+          </li>
+        ];
       }
     }
   }
@@ -28,7 +35,7 @@ class Header extends React.Component {
             Emaily
           </Link>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li>{this.renderContext()}</li>
+            {this.renderContext()}
             <li>
               <a href="collapsible.html">JavaScript</a>
             </li>
